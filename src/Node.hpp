@@ -12,6 +12,8 @@
 class BasicNode
 {
 public:
+  virtual ~BasicNode() = default;
+
   enum class Type
   {
     CommandInvocation, // set(a b c)
@@ -124,13 +126,13 @@ public:
   template <BasicNode::Type T >
   Node<T>& GetAs()
   {
-    return static_cast<Node<T>&>(*this);
+    return dynamic_cast<Node<T>&>(**this);
   }
 
   template <BasicNode::Type T>
   const Node<T>& GetAs() const
   {
-    return static_cast<const Node<T>&>(*this);
+    return dynamic_cast<const Node<T>&>(**this);
   }
 };
 
