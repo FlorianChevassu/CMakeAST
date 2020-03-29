@@ -153,3 +153,19 @@ public:
 private:
   std::string m_filepath;
 };
+
+template <>
+class Node<BasicNode::Type::CommandInvocation>
+  : public NodeBase<Node<BasicNode::Type::CommandInvocation>>
+{
+public:
+  static const BasicNode::Type NodeType = BasicNode::Type::CommandInvocation;
+
+  Node(std::string i_commandName = "") : m_commandName(i_commandName)
+  {
+  }
+  const std::string& GetCommandName() { return m_commandName; }
+  void SetCommandName(std::string i_commandName) { m_commandName = i_commandName; }
+private:
+  std::string m_commandName;
+};

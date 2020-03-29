@@ -30,13 +30,16 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
     REQUIRE(fileElement->GetType() == BasicNode::Type::FileElement);
     REQUIRE(fileElement->GetChildren().size() == 1);
 
-    auto& commandInvocation = fileElement->GetChildren()[0];
-    REQUIRE(commandInvocation->GetType() == BasicNode::Type::CommandInvocation);
-    auto& range = commandInvocation->GetRange();
+    auto& commandInvocationPtr = fileElement->GetChildren()[0];
+    REQUIRE(commandInvocationPtr->GetType() == BasicNode::Type::CommandInvocation);
+    auto& range = commandInvocationPtr->GetRange();
     REQUIRE(range.begin.line == 1);
     REQUIRE(range.begin.column == 1);
     REQUIRE(range.end.line == 1);
     REQUIRE(range.end.column == 37);
+
+    Node<BasicNode::Type::CommandInvocation>& commandInvocation = commandInvocationPtr.GetAs<BasicNode::Type::CommandInvocation>();
+    REQUIRE(commandInvocation.GetCommandName() == "cmake_minimum_required");
   }
 
 

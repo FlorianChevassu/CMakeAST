@@ -41,6 +41,11 @@ Range ASTBuilder::ConvertRange(const cmake::language::Range& i_range)
   return res;
 }
 
+const std::string_view GetStringView(const cmake::language::Range& i_range)
+{
+  return std::string_view(&*i_range.begin, std::distance(i_range.begin, i_range.end));
+}
+
 template <BasicNode::Type NT>
 void ASTBuilder::BuildClassicNode(BasicNode::PolymorphicNode& i_parent, const cmake::language::Token& i_token)
 {
@@ -48,6 +53,13 @@ void ASTBuilder::BuildClassicNode(BasicNode::PolymorphicNode& i_parent, const cm
   node->SetRange(this->ConvertRange(i_token.range));
   this->BuildChildren(node, i_token);
   i_parent->GetChildren().push_back(std::move(node));
+}
+
+template <>
+void ASTBuilder::BuildNode<cmake::language::ElementType::Identifier>(BasicNode::PolymorphicNode& i_parent, const cmake::language::Token& i_token)
+{
+  auto& commandInvocation = i_parent.GetAs<BasicNode::Type::CommandInvocation>();
+  commandInvocation.SetCommandName(std::string(GetStringView(i_token.range)));
 }
 
 template <>
