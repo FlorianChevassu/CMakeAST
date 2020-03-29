@@ -63,6 +63,18 @@ void ASTBuilder::BuildNode<cmake::language::ElementType::Identifier>(BasicNode::
 }
 
 template <>
+void ASTBuilder::BuildNode<cmake::language::ElementType::QuotedArgument>(BasicNode::PolymorphicNode& i_parent, const cmake::language::Token& i_token)
+{
+  this->BuildClassicNode<BasicNode::Type::QuotedArgument>(i_parent, i_token);
+}
+
+template <>
+void ASTBuilder::BuildNode<cmake::language::ElementType::UnquotedArgument>(BasicNode::PolymorphicNode& i_parent, const cmake::language::Token& i_token)
+{
+  this->BuildClassicNode<BasicNode::Type::UnquotedArgument>(i_parent, i_token);
+}
+
+template <>
 void ASTBuilder::BuildNode<cmake::language::ElementType::FileElement>(BasicNode::PolymorphicNode& i_parent, const cmake::language::Token& i_token)
 {
   this->BuildClassicNode<BasicNode::Type::FileElement>(i_parent, i_token);

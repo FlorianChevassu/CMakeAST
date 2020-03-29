@@ -145,10 +145,13 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
 
     auto& argument = arguments->GetChildren()[0];
     REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-    REQUIRE(argument->GetChildren().size() == 0);
+    REQUIRE(argument->GetChildren().size() == 1);
 
+    auto& unquotedArgument = argument->GetChildren()[0];
+    REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+    REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-    auto& range = argument->GetRange();
+    auto& range = unquotedArgument->GetRange();
     REQUIRE(range.begin.line == 1);
     REQUIRE(range.begin.column == 5);
     REQUIRE(range.end.line == 1);
@@ -181,10 +184,13 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
       // First argument
       auto& argument = arguments->GetChildren()[0];
       REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-      REQUIRE(argument->GetChildren().size() == 0);
+      REQUIRE(argument->GetChildren().size() == 1);
 
+      auto& unquotedArgument = argument->GetChildren()[0];
+      REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+      REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-      auto& range = argument->GetRange();
+      auto& range = unquotedArgument->GetRange();
       REQUIRE(range.begin.line == 1);
       REQUIRE(range.begin.column == 5);
       REQUIRE(range.end.line == 1);
@@ -195,10 +201,13 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
       // Second argument
       auto& argument = arguments->GetChildren()[1];
       REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-      REQUIRE(argument->GetChildren().size() == 0);
+      REQUIRE(argument->GetChildren().size() == 1);
 
+      auto& unquotedArgument = argument->GetChildren()[0];
+      REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+      REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-      auto& range = argument->GetRange();
+      auto& range = unquotedArgument->GetRange();
       REQUIRE(range.begin.line == 1);
       REQUIRE(range.begin.column == 7);
       REQUIRE(range.end.line == 1);
