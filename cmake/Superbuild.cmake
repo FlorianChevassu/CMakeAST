@@ -8,7 +8,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/External_polymorphic_value.cmake)
 
 ExternalProject_Add(${PROJECT_NAME}
   DOWNLOAD_COMMAND ""
-  INSTALL_COMMAND ""
   CMAKE_ARGS
     -DBUILD_SUPERBUILD=OFF
     -DCatch2_DIR=${Catch2_DIR}

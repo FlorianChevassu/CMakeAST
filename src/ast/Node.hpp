@@ -2,12 +2,12 @@
 
 #include "Context.hpp"
 
-#include "Range.hpp"
-
 #include "polymorphic_value.h"
 
 #include <string>
 #include <vector>
+
+class Visitor;
 
 class BasicNode
 {
@@ -19,17 +19,9 @@ public:
     CommandInvocation, // set(a b c)
     Argument, // a, "a"
     Arguments, // (a b c)
-    BracketArgument, // [[ a b ]]
-    BracketClose, // ]]
     BracketComment, // #[[ comment ]]
-    BracketContent, // anything
-    BracketOpen, // [[
     Comment, // # comment
-    File,
-    FileElement, // Comment, or CommandInvocation
-    Identifier, // Command name
-    QuotedArgument, // "a"
-    UnquotedArgument // a
+    File
   };
 
   virtual BasicNode* Clone() const = 0;
@@ -49,6 +41,13 @@ public:
   {
     m_range = i_range;
   }
+
+  virtual void Accept(Visitor& i_visitor) = 0;
+  virtual void Accept(Visitor& i_visitor) const = 0;
+
+protected:
+  template <typename T>
+  friend void AcceptImpl(const T& self, Visitor& i_visitor);
 
 public:
   struct NodeCopy;
@@ -75,19 +74,8 @@ class NodeBase : public BasicNode
 private:
   Derived& GetThis() { return static_cast<Derived&>(*this); }
   const Derived& GetThis() const { return static_cast<const Derived&>(*this); }
+
 public:
-  template <class Visitor>
-  void Accept(Visitor& i_visitor)
-  {
-    auto& that = GetThis();
-    i_visitor.Visit(that);
-
-    for (auto& child : this->GetChildren())
-    {
-      child->Accept(i_visitor);
-    }
-  }
-
   BasicNode* Clone() const override
   {
     return new Derived(GetThis());
@@ -104,6 +92,16 @@ class Node : public NodeBase<Node<T>>
 {
 public:
   static const BasicNode::Type NodeType = T;
+
+  void Accept(Visitor& i_visitor) override
+  {
+    return AcceptImpl(*this, i_visitor);
+  }
+
+  void Accept(Visitor& i_visitor) const override
+  {
+    return AcceptImpl(*this, i_visitor);
+  }
 };
 
 struct BasicNode::PolymorphicNode : public jbcoe::polymorphic_value<BasicNode>
@@ -136,36 +134,5 @@ public:
   }
 };
 
-// We can create specific implementations if we need to store
-// aditional information. For example:
-template <>
-class Node<BasicNode::Type::File>
-  : public NodeBase<Node<BasicNode::Type::File>>
-{
-public:
-  static const BasicNode::Type NodeType = BasicNode::Type::File;
-  
-  Node(std::string i_filePath = "") : m_filepath(i_filePath)
-  {
 
-  }
-  std::string GetFilePath() { return m_filepath; }
-private:
-  std::string m_filepath;
-};
-
-template <>
-class Node<BasicNode::Type::CommandInvocation>
-  : public NodeBase<Node<BasicNode::Type::CommandInvocation>>
-{
-public:
-  static const BasicNode::Type NodeType = BasicNode::Type::CommandInvocation;
-
-  Node(std::string i_commandName = "") : m_commandName(i_commandName)
-  {
-  }
-  const std::string& GetCommandName() { return m_commandName; }
-  void SetCommandName(std::string i_commandName) { m_commandName = i_commandName; }
-private:
-  std::string m_commandName;
-};
+#include "Node.tpp"

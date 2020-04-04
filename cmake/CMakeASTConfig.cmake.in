@@ -1,1 +1,9 @@
+include(CMakeFindDependencyMacro)
+
+set(CMakeParser_DIR "@CMakeParser_DIR@")
+set(polymorphic_value_DIR "@polymorphic_value_DIR@")
+
+find_dependency(CMakeParser REQUIRED)
+find_dependency(polymorphic_value REQUIRED)
+
 include("${CMAKE_CURRENT_LIST_DIR}/CMakeASTTargets.cmake")

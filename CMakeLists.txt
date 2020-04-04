@@ -23,6 +23,7 @@ install(TARGETS CMakeAST
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
+        PUBLIC_HEADER DESTINATION include
         INCLUDES DESTINATION include
 )
 
