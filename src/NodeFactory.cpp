@@ -15,16 +15,8 @@ BasicNode::PolymorphicNode NodeFactory::CreateNode(BasicNode::Type i_type)
     return NodeFactory::CreateNode<BasicNode::Type::Argument>();
   case BasicNode::Type::Arguments:
     return NodeFactory::CreateNode<BasicNode::Type::Arguments>();
-  case BasicNode::Type::BracketArgument:
-    return NodeFactory::CreateNode<BasicNode::Type::BracketArgument>();
-  case BasicNode::Type::BracketClose:
-    return NodeFactory::CreateNode<BasicNode::Type::BracketClose>();
   case BasicNode::Type::BracketComment:
     return NodeFactory::CreateNode<BasicNode::Type::BracketComment>();
-  case BasicNode::Type::BracketContent:
-    return NodeFactory::CreateNode<BasicNode::Type::BracketContent>();
-  case BasicNode::Type::BracketOpen:
-    return NodeFactory::CreateNode<BasicNode::Type::BracketOpen>();
   case BasicNode::Type::CommandInvocation:
     return NodeFactory::CreateNode<BasicNode::Type::CommandInvocation>();
   case BasicNode::Type::Comment:
@@ -40,7 +32,8 @@ BasicNode::PolymorphicNode NodeFactory::CreateNode(BasicNode::Type i_type)
   case BasicNode::Type::UnquotedArgument:
     return NodeFactory::CreateNode<BasicNode::Type::UnquotedArgument>();
   default:
-    assert(false); // Node type not supported yet...
+    // Node type not supported...
+    assert(false);
   }
 
   return {};

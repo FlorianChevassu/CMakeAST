@@ -19,11 +19,7 @@ public:
     CommandInvocation, // set(a b c)
     Argument, // a, "a"
     Arguments, // (a b c)
-    BracketArgument, // [[ a b ]]
-    BracketClose, // ]]
     BracketComment, // #[[ comment ]]
-    BracketContent, // anything
-    BracketOpen, // [[
     Comment, // # comment
     File,
     FileElement, // Comment, or CommandInvocation
@@ -149,7 +145,7 @@ public:
   {
 
   }
-  std::string GetFilePath() { return m_filepath; }
+  const std::string& GetFilePath() const { return m_filepath; }
 private:
   std::string m_filepath;
 };
@@ -168,4 +164,54 @@ public:
   void SetCommandName(std::string i_commandName) { m_commandName = i_commandName; }
 private:
   std::string m_commandName;
+};
+
+template <>
+class Node<BasicNode::Type::Argument>
+  : public NodeBase<Node<BasicNode::Type::Argument>>
+{
+public:
+  static const BasicNode::Type NodeType = BasicNode::Type::Argument;
+
+  bool IsQuoted() const { return m_isQuoted; }
+  void SetIsQuoted(bool i_isQuoted) { m_isQuoted = i_isQuoted; }
+
+  bool IsBracket() const { return m_isBracket; }
+  void SetIsBracket(bool i_isBracket) { m_isBracket = i_isBracket; }
+
+  std::string GetValue() const { return m_value; }
+  void SetValue(const std::string& i_value) { m_value = i_value; }
+
+private:
+  bool m_isQuoted = false;
+  bool m_isBracket = false;
+  std::string m_value;
+};
+
+template <>
+class Node<BasicNode::Type::Comment>
+  : public NodeBase<Node<BasicNode::Type::Comment>>
+{
+public:
+  static const BasicNode::Type NodeType = BasicNode::Type::Comment;
+
+  std::string GetValue() const { return m_value; }
+  void SetValue(const std::string& i_value) { m_value = i_value; }
+
+private:
+  std::string m_value;
+};
+
+template <>
+class Node<BasicNode::Type::BracketComment>
+  : public NodeBase<Node<BasicNode::Type::BracketComment>>
+{
+public:
+  static const BasicNode::Type NodeType = BasicNode::Type::BracketComment;
+
+  std::string GetValue() const { return m_value; }
+  void SetValue(const std::string& i_value) { m_value = i_value; }
+
+private:
+  std::string m_value;
 };

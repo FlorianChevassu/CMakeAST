@@ -138,7 +138,6 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
     REQUIRE(commandInvocation->GetType() == BasicNode::Type::CommandInvocation);
     REQUIRE(commandInvocation->GetChildren().size() == 1);
 
-
     auto& arguments = commandInvocation->GetChildren()[0];
     REQUIRE(arguments->GetType() == BasicNode::Type::Arguments);
     REQUIRE(arguments->GetChildren().size() == 1);

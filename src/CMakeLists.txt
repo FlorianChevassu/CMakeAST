@@ -4,6 +4,20 @@ find_package(polymorphic_value REQUIRED)
 add_library(CMakeAST STATIC)
 
 target_sources(CMakeAST PRIVATE
+    ArgumentASTBuilder.hpp
+    ArgumentASTBuilder.cpp
+    ArgumentsASTBuilder.hpp
+    ArgumentsASTBuilder.cpp
+    BracketCommentASTBuilder.hpp
+    BracketCommentASTBuilder.cpp
+    CommandInvocationASTBuilder.hpp
+    CommandInvocationASTBuilder.cpp
+    FileASTBuilder.hpp
+    FileASTBuilder.cpp
+    FileElementASTBuilder.hpp
+    FileElementASTBuilder.cpp
+    LineCommentASTBuilder.hpp
+    LineCommentASTBuilder.cpp
     ASTBuilder.hpp
     ASTBuilder.cpp
     Context.hpp
