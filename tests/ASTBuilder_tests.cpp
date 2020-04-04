@@ -30,13 +30,16 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
     REQUIRE(fileElement->GetType() == BasicNode::Type::FileElement);
     REQUIRE(fileElement->GetChildren().size() == 1);
 
-    auto& commandInvocation = fileElement->GetChildren()[0];
-    REQUIRE(commandInvocation->GetType() == BasicNode::Type::CommandInvocation);
-    auto& range = commandInvocation->GetRange();
+    auto& commandInvocationPtr = fileElement->GetChildren()[0];
+    REQUIRE(commandInvocationPtr->GetType() == BasicNode::Type::CommandInvocation);
+    auto& range = commandInvocationPtr->GetRange();
     REQUIRE(range.begin.line == 1);
     REQUIRE(range.begin.column == 1);
     REQUIRE(range.end.line == 1);
     REQUIRE(range.end.column == 37);
+
+    Node<BasicNode::Type::CommandInvocation>& commandInvocation = commandInvocationPtr.GetAs<BasicNode::Type::CommandInvocation>();
+    REQUIRE(commandInvocation.GetCommandName() == "cmake_minimum_required");
   }
 
 
@@ -135,17 +138,19 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
     REQUIRE(commandInvocation->GetType() == BasicNode::Type::CommandInvocation);
     REQUIRE(commandInvocation->GetChildren().size() == 1);
 
-
     auto& arguments = commandInvocation->GetChildren()[0];
     REQUIRE(arguments->GetType() == BasicNode::Type::Arguments);
     REQUIRE(arguments->GetChildren().size() == 1);
 
     auto& argument = arguments->GetChildren()[0];
     REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-    REQUIRE(argument->GetChildren().size() == 0);
+    REQUIRE(argument->GetChildren().size() == 1);
 
+    auto& unquotedArgument = argument->GetChildren()[0];
+    REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+    REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-    auto& range = argument->GetRange();
+    auto& range = unquotedArgument->GetRange();
     REQUIRE(range.begin.line == 1);
     REQUIRE(range.begin.column == 5);
     REQUIRE(range.end.line == 1);
@@ -178,10 +183,13 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
       // First argument
       auto& argument = arguments->GetChildren()[0];
       REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-      REQUIRE(argument->GetChildren().size() == 0);
+      REQUIRE(argument->GetChildren().size() == 1);
 
+      auto& unquotedArgument = argument->GetChildren()[0];
+      REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+      REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-      auto& range = argument->GetRange();
+      auto& range = unquotedArgument->GetRange();
       REQUIRE(range.begin.line == 1);
       REQUIRE(range.begin.column == 5);
       REQUIRE(range.end.line == 1);
@@ -192,10 +200,13 @@ TEST_CASE("ASTBuilder", "[ASTBuilder]")
       // Second argument
       auto& argument = arguments->GetChildren()[1];
       REQUIRE(argument->GetType() == BasicNode::Type::Argument);
-      REQUIRE(argument->GetChildren().size() == 0);
+      REQUIRE(argument->GetChildren().size() == 1);
 
+      auto& unquotedArgument = argument->GetChildren()[0];
+      REQUIRE(unquotedArgument->GetType() == BasicNode::Type::UnquotedArgument);
+      REQUIRE(unquotedArgument->GetChildren().size() == 0);
 
-      auto& range = argument->GetRange();
+      auto& range = unquotedArgument->GetRange();
       REQUIRE(range.begin.line == 1);
       REQUIRE(range.begin.column == 7);
       REQUIRE(range.end.line == 1);
